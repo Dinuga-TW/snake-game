@@ -4,7 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <!-- VT323 font (official source) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+
+    <title>Snake Game</title>
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -12,13 +19,24 @@
 <body>
 
     <div id="gameContainer">
-        <canvas id="gameBoard" width="500" height="500"> </canvas>
 
-        <div id="scoreText">0</div>
+        <div id="hud">
+            <div class="hud-left">SCORE <span id="scoreText">0</span></div>
+            <div class="hud-right">HIGH <span id="highScoreText">0</span></div>
+        </div>
+
+        <div class="board-wrapper">
+            <canvas id="gameBoard" width="500" height="500"></canvas>
+
+            <div id="gameOverOverlay">
+                <div class="gameover-text">GAME OVER</div>
+            </div>
+        </div>
+
+
         <button id="resetButton">Reset</button>
-
-
     </div>
+
 
     <script src="index.js"></script>
 
