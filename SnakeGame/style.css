@@ -14,7 +14,7 @@
 }
 
 
-/* NEW: HUD bar above the board */
+/* HUD bar above the board */
 #hud {
     width: 500px;
     /* match canvas width */
@@ -61,17 +61,25 @@
 }
 
 
-
-
-#resetButton {
-    font-family: "VT323", monospace;
-    font-size: 28px;
-    letter-spacing: 1px;
-
+/* --- Controls row (Pause / Play / Restart) --- */
+#controls {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
     margin-top: 6px;
+}
 
-    padding: 8px 22px;
-    border-radius: 12px;
+/* Reuse the same retro button styling but make it icon-sized */
+.icon-btn {
+    width: 54px;
+    height: 54px;
+
+    display: grid;
+    place-items: center;
+
+    padding: 0;
+    border-radius: 14px;
 
     color: #e8e8ff;
     background: #151626;
@@ -85,17 +93,29 @@
     transition: transform 120ms ease, filter 120ms ease, box-shadow 120ms ease;
 }
 
-#resetButton:hover {
+.icon-btn:hover {
     filter: brightness(1.15);
     box-shadow:
         0 10px 26px rgba(0, 0, 0, 0.55),
         0 0 18px rgba(120, 120, 255, 0.18);
 }
 
-#resetButton:active {
+.icon-btn:active {
     transform: translateY(1px);
     filter: brightness(1.05);
 }
+
+.icon-btn img {
+    width: 30px;
+    height: 30px;
+    display: block;
+
+    filter: invert(92%) sepia(10%) saturate(500%) hue-rotate(200deg) brightness(105%);
+
+    /* Keep pixel crispness */
+    image-rendering: pixelated;
+}
+
 
 
 body {
@@ -138,4 +158,29 @@ body {
     text-shadow:
         0 0 10px rgba(200, 200, 255, .35),
         0 0 30px rgba(120, 120, 255, .15);
+}
+
+#pausedOverlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 3;
+}
+
+.paused-text {
+    font-family: "VT323", monospace;
+    font-size: 62px;
+    letter-spacing: 4px;
+    color: #c7c7ff;
+    text-shadow: 0 0 12px rgba(199, 199, 255, 0.6);
+}
+
+/* When paused, show overlay */
+.board-wrapper.is-paused #pausedOverlay {
+    display: flex;
 }

@@ -26,6 +26,8 @@ let snake = [
     { x: 0, y: 0 }
 ];
 
+let isPaused = false;
+let tickTimeout = null;
 
 // ==== CRT Retro Render Setup ====
 const RENDER_SCALE = 3; // 2–4 (higher = chunkier pixels)
@@ -76,7 +78,13 @@ window.addEventListener("keydown", changeDirection);
 
 resetButton.addEventListener("click", resetGame);
 
+const boardWrapper = document.querySelector(".board-wrapper");
 
+const pauseBtn = document.getElementById("pauseButton"); 
+const playBtn  = document.getElementById("playButton");  
+
+if (pauseBtn) pauseBtn.addEventListener("click", pauseGame);
+if (playBtn)  playBtn.addEventListener("click", resumeGame);
 
 
 gameStart();
@@ -91,26 +99,51 @@ function gameStart() {
 };
 
 function nextTick() {
-    if (running) {
-        setTimeout(() => {
-            clearBoard();   // draw to offscreen low-res
-            drawFood();     // offscreen
-            moveSnake();
-            drawSnake();    // offscreen
+  if (!running || isPaused) return;
 
+  tickTimeout = setTimeout(() => {
+    clearBoard();
+    drawFood();
+    moveSnake();
+    drawSnake();
 
-            // Blit to main canvas scaled up, then overlay scanlines
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(off, 0, 0, off.width, off.height, 0, 0, gameWidth, gameHeight);
-            drawScanlines();
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(off, 0, 0, off.width, off.height, 0, 0, gameWidth, gameHeight);
+    drawScanlines();
 
-            checkGameOver();
-            nextTick();
-        }, 75);
-    } else {
-        displayGameOver();
-    }
+    checkGameOver();
+
+    if (running) nextTick();
+    else displayGameOver();
+
+  }, 75);
 }
+
+function pauseGame() {
+  // Don't pause if game isn't running (or if already paused)
+  if (!running || isPaused) return;
+
+  isPaused = true;
+
+  if (tickTimeout) {
+    clearTimeout(tickTimeout);
+    tickTimeout = null;
+  }
+
+  if (boardWrapper) boardWrapper.classList.add("is-paused");
+}
+
+function resumeGame() {
+  // Only resume if currently paused and game is still running (not game over)
+  if (!running || !isPaused) return;
+
+  isPaused = false;
+
+  if (boardWrapper) boardWrapper.classList.remove("is-paused");
+
+  nextTick(); // resume loop
+}
+
 
 
 function clearBoard() {
@@ -246,6 +279,16 @@ function displayGameOver() {
 };
 
 function resetGame() {
+
+    isPaused = false;
+
+    if (tickTimeout) {
+    clearTimeout(tickTimeout);
+    tickTimeout = null;
+    }
+
+    if (boardWrapper) boardWrapper.classList.remove("is-paused");
+
     score = 0;
     xVelocity = unitSize;
     yVelocity = 0;
