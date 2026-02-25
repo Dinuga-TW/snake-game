@@ -1,122 +1,33 @@
-#gameContainer {
-    display: grid;
-    justify-items: center;
-    gap: 10px;
-
-    padding: 18px 18px 22px;
-    border-radius: 18px;
-
-    background: rgba(10, 10, 16, 0.55);
-    border: 1px solid rgba(80, 80, 120, 0.25);
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.55),
-        0 0 40px rgba(120, 120, 255, 0.10);
+html,
+body {
+    height: 100%;
+    overflow: hidden;
 }
 
 
-/* HUD bar above the board */
-#hud {
-    width: 500px;
-    /* match canvas width */
-    margin: 0 auto 8px;
-    padding: 8px 12px;
+/* ==============================
+   THEME
+   ============================== */
+   
+:root {
+    --bg-0: #05060d;
+    --bg-1: #070a18;
+    --bg-2: #0b1030;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    --text: #dbe7ff;
+    --text-strong: #eef3ff;
 
-    background: #0f1018;
-    border: 1px solid #2a2c3f;
-    border-radius: 8px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
+    --panel-border: rgba(0, 240, 255, 0.18);
+    --line-soft: rgba(0, 240, 255, 0.14);
 
-    color: #c7c7ff;
-    font-family: "VT323", monospace;
-    font-size: 26px;
-    letter-spacing: 1px;
-}
-
-.hud-right {
-    opacity: 0.9;
-
-}
-
-#scoreText {
-    font-family: "VT323", monospace;
-    font-size: 26px;
-    margin-left: 10px;
-}
-
-#gameBoard {
-    border: 2px solid rgba(199, 199, 255, 0.25);
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-    transition: filter 180ms ease, transform 180ms ease;
-}
-
-/* When game ends, make the board look "inactive" */
-#gameBoard.is-gameover {
-    filter: blur(2px) brightness(0.75);
-    transform: scale(0.998);
+    --glow-soft: rgba(0, 240, 255, 0.10);
+    --shadow-strong: 0 22px 70px rgba(0, 0, 0, 0.70);
 }
 
 
-/* --- Controls row (Pause / Play / Restart) --- */
-#controls {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    align-items: center;
-    margin-top: 6px;
-}
-
-/* Reuse the same retro button styling but make it icon-sized */
-.icon-btn {
-    width: 54px;
-    height: 54px;
-
-    display: grid;
-    place-items: center;
-
-    padding: 0;
-    border-radius: 14px;
-
-    color: #e8e8ff;
-    background: #151626;
-    border: 1px solid rgba(199, 199, 255, 0.25);
-
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.45),
-        0 0 0 rgba(120, 120, 255, 0);
-
-    cursor: pointer;
-    transition: transform 120ms ease, filter 120ms ease, box-shadow 120ms ease;
-}
-
-.icon-btn:hover {
-    filter: brightness(1.15);
-    box-shadow:
-        0 10px 26px rgba(0, 0, 0, 0.55),
-        0 0 18px rgba(120, 120, 255, 0.18);
-}
-
-.icon-btn:active {
-    transform: translateY(1px);
-    filter: brightness(1.05);
-}
-
-.icon-btn img {
-    width: 30px;
-    height: 30px;
-    display: block;
-
-    filter: invert(92%) sepia(10%) saturate(500%) hue-rotate(200deg) brightness(105%);
-
-    /* Keep pixel crispness */
-    image-rendering: pixelated;
-}
-
-
+/* ==============================
+   PAGE
+   ============================== */
 
 body {
     margin: 0;
@@ -124,24 +35,207 @@ body {
     display: grid;
     place-items: center;
 
-    background: radial-gradient(circle at top, #1a1b2a 0%, #0b0c12 55%, #05060a 100%);
-    color: #c7c7ff;
+    color: var(--text);
+    background: radial-gradient(circle at top, var(--bg-2) 0%, var(--bg-1) 55%, var(--bg-0) 100%);
+    overflow-x: hidden;
+    position: relative;
 }
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    background:
+        radial-gradient(circle at 50% 35%,
+            rgba(140, 140, 255, 0.12) 0%,
+            rgba(0, 0, 0, 0) 42%),
+        radial-gradient(circle at 50% 60%,
+            rgba(0, 0, 0, 0) 35%,
+            rgba(0, 0, 0, 0.55) 78%,
+            rgba(0, 0, 0, 0.88) 100%);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+
+    width: 1300px;
+    height: 1300px;
+
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+
+    background: radial-gradient(circle,
+            rgba(0, 240, 255, 0.22) 0%,
+            rgba(0, 240, 255, 0.16) 15%,
+            rgba(85, 61, 242, 0.14) 40%,
+            rgba(0, 0, 0, 0.00) 80%);
+
+    filter: blur(35px);
+    opacity: 0.95;
+}
+
+
+/* ==============================
+   CONTAINER
+   ============================== */
+
+#gameContainer {
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+
+    padding: 18px 18px 22px;
+    border-radius: 18px;
+
+    background: linear-gradient(180deg, #0a0e1f 0%, #05080f 100%);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+
+    box-shadow:
+        var(--shadow-strong),
+        0 0 55px rgba(120, 120, 255, 0.14);
+}
+
+
+/* ==============================
+   HUD
+   ============================== */
+
+#hud {
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 10px 14px;
+    border-radius: 10px;
+
+    background: rgba(15, 20, 45, 0.85);
+    border: 1px solid rgba(0, 240, 255, 0.35);
+
+    box-shadow:
+        inset 0 0 10px rgba(0, 240, 255, 0.08),
+        0 0 16px rgba(0, 240, 255, 0.20),
+        0 0 8px rgba(85, 61, 242, 0.15);
+}
+
+.hud-left,
+.hud-right {
+    font-family: "VT323", monospace;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: var(--text);
+    text-shadow: 0 0 10px var(--glow-soft);
+}
+
+
+/* ==============================
+   BOARD FRAME + CANVAS
+   ============================== */
 
 .board-wrapper {
     position: relative;
+    overflow: hidden;
+    isolation: isolate;
+
+    padding: 12px;
+    border-radius: 16px;
+
+    background: linear-gradient(180deg, rgba(18, 24, 48, 0.96), rgba(10, 12, 22, 0.96));
+    border: 1px solid rgba(0, 240, 255, 0.28);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.35),
+        0 14px 36px rgba(0, 0, 0, 0.58),
+        0 0 30px rgba(0, 240, 255, 0.08);
 }
+
+.board-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+
+    background:
+        radial-gradient(120% 80% at 18% 12%,
+            rgba(255, 255, 255, 0.10) 0%,
+            rgba(255, 255, 255, 0.04) 25%,
+            rgba(255, 255, 255, 0.00) 55%),
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.00) 40%);
+
+    opacity: 0.55;
+}
+
+.board-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+
+    background:
+        radial-gradient(circle at 50% 50%,
+            rgba(255, 255, 255, 1.0) 55%,
+            rgba(255, 255, 255, 0.6) 72%,
+            rgba(255, 255, 255, 0.0) 100%),
+        repeating-linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.045) 0px,
+            rgba(255, 255, 255, 0.045) 1px,
+            rgba(0, 0, 0, 0.00) 5px,
+            rgba(0, 0, 0, 0.22) 6px,
+            rgba(0, 0, 0, 0.22) 9px);
+
+    opacity: 0.45;
+    mix-blend-mode: overlay;
+}
+
+#gameBoard {
+    border: 2px solid rgba(199, 199, 255, 0.26);
+    border-radius: 12px;
+
+    position: relative;
+    z-index: 1;
+
+    box-shadow:
+        0 12px 34px rgba(0, 0, 0, 0.48),
+        0 0 24px rgba(120, 120, 255, 0.06);
+
+    transition: filter 180ms ease, transform 180ms ease;
+}
+
+#gameBoard.is-gameover {
+    filter: blur(2px) brightness(0.75);
+    transform: scale(0.998);
+}
+
+
+/* ==============================
+   OVERLAYS
+   ============================== */
 
 #gameOverOverlay {
     position: absolute;
     inset: 0;
 
     display: none;
-    /* hidden during play */
     place-items: center;
 
     pointer-events: none;
-    /* clicks pass through */
+    z-index: 3;
 }
 
 #gameOverOverlay.active {
@@ -151,20 +245,19 @@ body {
 .gameover-text {
     font-family: "VT323", monospace;
     font-size: 72px;
-
     letter-spacing: 8px;
 
-    color: #e8e8ff;
+    color: var(--text-strong);
     text-shadow:
-        0 0 10px rgba(200, 200, 255, .35),
-        0 0 30px rgba(120, 120, 255, .15);
+        0 0 10px rgba(200, 200, 255, 0.40),
+        0 0 30px rgba(120, 120, 255, 0.18);
 }
 
 #pausedOverlay {
     position: absolute;
     inset: 0;
-    display: none;
 
+    display: none;
     align-items: center;
     justify-content: center;
 
@@ -172,15 +265,74 @@ body {
     z-index: 3;
 }
 
-.paused-text {
-    font-family: "VT323", monospace;
-    font-size: 62px;
-    letter-spacing: 4px;
-    color: #c7c7ff;
-    text-shadow: 0 0 12px rgba(199, 199, 255, 0.6);
-}
-
-/* When paused, show overlay */
 .board-wrapper.is-paused #pausedOverlay {
     display: flex;
+}
+
+.paused-text {
+    font-family: "VT323", monospace;
+    font-size: 68px;
+    letter-spacing: 5px;
+
+    color: var(--text);
+    text-shadow: 0 0 14px rgba(199, 199, 255, 0.62);
+}
+
+
+/* ==============================
+   CONTROLS
+   ============================== */
+
+#controls {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.icon-btn {
+    width: 56px;
+    height: 56px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+
+    display: grid;
+    place-items: center;
+
+    filter:
+        drop-shadow(0 0 8px rgba(0, 240, 255, 0.60))
+        drop-shadow(0 0 18px rgba(0, 240, 255, 0.25));
+
+    transition: filter 160ms ease, transform 120ms ease;
+}
+
+.icon-btn:hover {
+    transform: translateY(-1px);
+    filter:
+        drop-shadow(0 0 14px rgba(0, 240, 255, 0.90))
+        drop-shadow(0 0 35px rgba(0, 240, 255, 0.45))
+        drop-shadow(0 0 20px rgba(85, 61, 242, 0.25));
+}
+
+.icon-btn:active {
+    transform: translateY(0) scale(0.96);
+}
+
+.icon-btn img {
+    width: 50px;
+    height: 50px;
+    display: block;
+
+    object-fit: contain;
+    object-position: center;
+
+    margin: auto;
+
+    filter:
+        invert(1) sepia(1) saturate(2000%) hue-rotate(165deg) brightness(1.05)
+        drop-shadow(0 0 8px rgba(0, 240, 255, 0.35))
+        drop-shadow(0 0 2px rgba(85, 61, 242, 0.25));
 }

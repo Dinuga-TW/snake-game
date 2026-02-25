@@ -5,12 +5,10 @@ const resetButton = document.getElementById("resetButton");
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
 
-const boardBackground = "#101018"; // was "white"
-const snakeColor = "#7cff6b";     // main fill
-const snakeBorder = "#2a7a2a";    // darker outline for separation
-
-const foodColor = "#ffd700";       // was "red"
-
+const boardBackground = "#101018";
+const snakeColor = "#00f0ff";
+const snakeBorder = "#0088aa";
+const foodColor = "#ff4ecd";
 const unitSize = 25;
 
 let running = false;
@@ -29,8 +27,8 @@ let snake = [
 let isPaused = false;
 let tickTimeout = null;
 
-// ==== CRT Retro Render Setup ====
-const RENDER_SCALE = 3; // 2–4 (higher = chunkier pixels)
+// CRT Retro Render Setup
+const RENDER_SCALE = 3;
 
 const off = document.createElement('canvas');
 off.width = Math.floor(gameWidth / RENDER_SCALE);
@@ -41,26 +39,15 @@ octx.imageSmoothingEnabled = false;
 // Drawing context alias used by draw functions
 let dctx = octx;
 
-// Retro palette
-const retro = {
-    bg: "#101018",
-    snake: "#7cff6b",
-    food: "#ffd700",
-    hud: "#c7c7ff",
-    font: "18px 'VT323', monospace"
-};
-
-// Helpers to map world → low-res
+// Helpers to map world coordinates to low-res canvas
 const toLow = v => Math.floor(v / RENDER_SCALE);
 const u = v => Math.max(1, Math.floor(v / RENDER_SCALE));
 
 const highScoreEl = document.getElementById("highScoreText");
 let highScore = Number(sessionStorage.getItem("snakeHighScore") || 0);
 
-// show stored high score on load
+// Show stored high score on load
 if (highScoreEl) highScoreEl.textContent = highScore;
-
-
 
 // Scanline overlay on main canvas
 function drawScanlines() {
@@ -71,24 +58,17 @@ function drawScanlines() {
     ctx.restore();
 }
 
-
-
 window.addEventListener("keydown", changeDirection);
-
-
 resetButton.addEventListener("click", resetGame);
 
 const boardWrapper = document.querySelector(".board-wrapper");
-
-const pauseBtn = document.getElementById("pauseButton"); 
-const playBtn  = document.getElementById("playButton");  
+const pauseBtn = document.getElementById("pauseButton");
+const playBtn = document.getElementById("playButton");
 
 if (pauseBtn) pauseBtn.addEventListener("click", pauseGame);
-if (playBtn)  playBtn.addEventListener("click", resumeGame);
-
+if (playBtn) playBtn.addEventListener("click", resumeGame);
 
 gameStart();
-
 
 function gameStart() {
     running = true;
@@ -96,61 +76,56 @@ function gameStart() {
     createFood();
     drawFood();
     nextTick();
-};
+}
 
 function nextTick() {
-  if (!running || isPaused) return;
+    if (!running || isPaused) return;
 
-  tickTimeout = setTimeout(() => {
-    clearBoard();
-    drawFood();
-    moveSnake();
-    drawSnake();
+    tickTimeout = setTimeout(() => {
+        clearBoard();
+        drawFood();
+        moveSnake();
+        drawSnake();
 
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(off, 0, 0, off.width, off.height, 0, 0, gameWidth, gameHeight);
-    drawScanlines();
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(off, 0, 0, off.width, off.height, 0, 0, gameWidth, gameHeight);
+        drawScanlines();
 
-    checkGameOver();
+        checkGameOver();
 
-    if (running) nextTick();
-    else displayGameOver();
+        if (running) nextTick();
+        else displayGameOver();
 
-  }, 75);
+    }, 75);
 }
 
 function pauseGame() {
-  // Don't pause if game isn't running (or if already paused)
-  if (!running || isPaused) return;
+    if (!running || isPaused) return;
 
-  isPaused = true;
+    isPaused = true;
 
-  if (tickTimeout) {
-    clearTimeout(tickTimeout);
-    tickTimeout = null;
-  }
+    if (tickTimeout) {
+        clearTimeout(tickTimeout);
+        tickTimeout = null;
+    }
 
-  if (boardWrapper) boardWrapper.classList.add("is-paused");
+    if (boardWrapper) boardWrapper.classList.add("is-paused");
 }
 
 function resumeGame() {
-  // Only resume if currently paused and game is still running (not game over)
-  if (!running || !isPaused) return;
+    if (!running || !isPaused) return;
 
-  isPaused = false;
+    isPaused = false;
 
-  if (boardWrapper) boardWrapper.classList.remove("is-paused");
+    if (boardWrapper) boardWrapper.classList.remove("is-paused");
 
-  nextTick(); // resume loop
+    nextTick();
 }
-
-
 
 function clearBoard() {
     dctx.fillStyle = boardBackground;
     dctx.fillRect(0, 0, off.width, off.height);
 }
-
 
 function createFood() {
     function randomFood(min, max) {
@@ -158,14 +133,13 @@ function createFood() {
         return randNum;
     }
     foodX = randomFood(0, gameWidth - unitSize);
-    foodY = randomFood(0, gameWidth - unitSize);
-};
+    foodY = randomFood(0, gameHeight - unitSize);
+}
 
 function drawFood() {
     dctx.fillStyle = foodColor;
     dctx.fillRect(toLow(foodX), toLow(foodY), u(unitSize), u(unitSize));
 }
-
 
 function moveSnake() {
     const head = {
@@ -175,12 +149,12 @@ function moveSnake() {
 
     snake.unshift(head);
 
-    //if food was eaten
+    // If food is eaten
     if (snake[0].x == foodX && snake[0].y == foodY) {
         score += 1;
         scoreText.textContent = score;
 
-        // update high score
+        // Update high score
         if (score > highScore) {
             highScore = score;
             sessionStorage.setItem("snakeHighScore", String(highScore));
@@ -192,7 +166,7 @@ function moveSnake() {
     else {
         snake.pop();
     }
-};
+}
 
 function drawSnake() {
     dctx.fillStyle = snakeColor;
@@ -204,7 +178,6 @@ function drawSnake() {
         }
     });
 }
-
 
 function changeDirection(event) {
     const keyPressed = event.keyCode;
@@ -232,11 +205,11 @@ function changeDirection(event) {
             yVelocity = 0;
             break;
         case (keyPressed == DOWN && !goingUp):
-            xVelocity = -0;
+            xVelocity = 0;
             yVelocity = unitSize;
             break;
     }
-};
+}
 
 function checkGameOver() {
     switch (true) {
@@ -258,7 +231,8 @@ function checkGameOver() {
             running = false;
         }
     }
-};
+}
+
 function displayGameOver() {
     ctx.font = "bold 64px VT323, monospace";
     ctx.textAlign = "center";
@@ -268,23 +242,17 @@ function displayGameOver() {
     ctx.strokeStyle = "rgba(0,0,0,0.7)";
     ctx.lineWidth = 8;
 
-
-
-
     running = false;
     document.getElementById("gameOverOverlay").classList.add("active");
     gameBoard.classList.add("is-gameover");
-
-
-};
+}
 
 function resetGame() {
-
     isPaused = false;
 
     if (tickTimeout) {
-    clearTimeout(tickTimeout);
-    tickTimeout = null;
+        clearTimeout(tickTimeout);
+        tickTimeout = null;
     }
 
     if (boardWrapper) boardWrapper.classList.remove("is-paused");
@@ -300,7 +268,4 @@ function resetGame() {
     gameStart();
     document.getElementById("gameOverOverlay").classList.remove("active");
     gameBoard.classList.remove("is-gameover");
-
-};
-
-
+}
