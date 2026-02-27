@@ -4,7 +4,7 @@ A browser-based Snake game reimagined with a retro-futuristic / Tron-inspired ar
 This project started as an exploration of visual design in games: how color, lighting, and UI hierarchy can transform a simple concept into something that feels polished and intentional. The gameplay stays true to the original, no gimmicks, just you vs. the snake, while the presentation aims for that "one more game" arcade appeal.
 
 
-## 🎮 [Play the Game Live!] ----> https://dinuga-tw.github.io/snake-game/
+## 🎮 Play the Game Live! ----> https://dinuga-tw.github.io/snake-game/
 
 ## 🎯 How to Play
 
