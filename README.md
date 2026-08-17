@@ -1,47 +1,40 @@
 # 🐍 Snake Game
 
-A browser-based Snake game reimagined with a retro-futuristic / Tron-inspired arcade UI.  
-This project started as an exploration of visual design in games: how color, lighting, and UI hierarchy can transform a simple concept into something that feels polished and intentional. The gameplay stays true to the original, no gimmicks, just you vs. the snake, while the presentation aims for that "one more game" arcade appeal.
+A simple browser-based version of the classic Snake game, built with HTML, CSS and JavaScript. 
 
+The gameplay stays pretty close to the original, with a bit of extra polish around the presentation. I went for a neon arcade / retro-futuristic look (emphasis on went for 😅) with cyan accents, glow effects and some CRT-style touches to give the game a bit more personality.
+
+<br>
 
 ## 🎮 Play the Game Live! ----> https://dinuga-tw.github.io/snake-game/
+
+<br>
 
 ## 🎯 How to Play
 
 - Use **Arrow Keys** to control the snake's direction
 - Eat the food to grow and increase your score
 - Avoid hitting the walls or yourself
-- Click **Pause** to take a breather
-- Hit **Restart** to go again (and beat that high score!)
+- Use **Pause** and **Play** to stop and resume the game
+- Use **Restart** to start over
 
 
 ## ✨ Features
 
-- Retro 80s arcade cabinet design with CRT monitor effects
-- Pixelated rendering for authentic retro look
-- Neon cyan/blue color scheme with glowing effects
-- Pause/resume functionality
-- High score tracking (session-based)
-- Responsive controls
-- Game over detection with restart option
+- Classic Snake gameplay
+- Pause, play and restart controls
+- Session-based high score tracking
+- Game Over and Paused overlays
+- Pixel-style rendering
+- Neon arcade-inspired UI
+- CRT-style scanlines and screen effects
 
 
-## 🛠️ Technologies Used
+## 🎨 Design
 
-- **HTML5 Canvas** - Game rendering and graphics
-- **Vanilla JavaScript** - Game logic and mechanics
-- **CSS3** - Retro UI styling with advanced effects
+The design is fairly simple, but I wanted it to feel a bit more polished than a plain Snake implementation. The general idea was a neon arcade look with dark blues, cyan glow, a bit of magenta contrast and some light CRT-inspired treatment on the game board.
 
-
-## 🎨 Design Highlights
-
-- Off-screen canvas rendering for crisp pixel scaling
-- Authentic CRT scanline overlay
-- Multi-layer CSS shadows for depth and neon glow
-- Radial gradient background halo effect
-- Glass surface reflection on game board frame
-- Carefully tuned color palette for visual cohesion
-
+Did it become the full-blown retro arcade masterpiece I had in my head? Sadly not. But I think it gave the game a more distinct look without going completely overboard with effects. The game is also rendered at a lower resolution and scaled up to give it a slightly more pixelated appearance.
 
 ## 📸 Screenshots
 
@@ -50,14 +43,15 @@ This project started as an exploration of visual design in games: how color, lig
 
 ## 📝 Future Improvements
 
+- Improve the visuals way more
 - Add sound effects and background music
 - Implement difficulty levels
-- Add mobile touch controls
+- Add mobile controls
 - Leaderboard system
 
 
-## 👨‍💻 Author
+## 🛠️ Built With
 
-**Dinuga-TW**
-
----
+- **HTML5 Canvas**
+- **Vanilla JavaScript**
+- **CSS3**
